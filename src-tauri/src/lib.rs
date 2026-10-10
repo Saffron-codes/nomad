@@ -26,6 +26,7 @@ fn format_remaining(seconds: u64) -> String {
 
 /// Linux desktop notification via libnotify. Other platforms use the
 /// notification plugin from the frontend instead.
+#[cfg(target_os = "linux")]
 #[tauri::command]
 fn notify(title: &str, body: &str) -> Result<(), String> {
     libnotify::init("Nomad").map_err(|e| e.to_string())?;
@@ -35,6 +36,14 @@ fn notify(title: &str, body: &str) -> Result<(), String> {
         .map_err(|e| e.to_string());
     libnotify::uninit();
     result
+}
+
+/// The frontend only calls `notify` on Linux; keep the command registered
+/// elsewhere so the invoke surface is identical on every platform.
+#[cfg(not(target_os = "linux"))]
+#[tauri::command]
+fn notify(_title: &str, _body: &str) -> Result<(), String> {
+    Err("Native libnotify notifications are only available on Linux".to_string())
 }
 
 #[tauri::command]
