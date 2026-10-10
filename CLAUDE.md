@@ -31,13 +31,15 @@ The frontend is split into a pure core, a single Zustand store, side-effecting h
 **Store (`src/stores/timerStore.ts`)** – one Zustand store (`useTimerStore`, devtools-wrapped) holding timer state, the persisted `AppSettings`, and settings load/save flags. `transition(event)` runs the reducer against the settings currently in the store, so settings must be loaded before the timer reads them.
 
 **Hooks (`src/hooks/`)** – all side effects live here, not in components:
+
 - `useTimer` runs the 1s `TICK` interval while in work/break, fires notifications when the phase crosses work↔break (tracked with a previous-phase ref), pushes every state change to the tray, and listens for the `tray-action` Tauri event to drive `start | pause | resume | reset` from the tray menu.
 - `useSettings` loads settings from disk on mount and exposes `saveSettings`. Each page that calls it triggers a load.
 
 **Services (`src/services/`)** – each exports an interface plus a `Tauri*` implementation:
+
 - `settings/settingsStore.ts` persists `AppSettings` to `settings.json` via `@tauri-apps/plugin-store` and validates the shape on read (falls back to `defaultSettings`).
 - `notifications/notificationService.ts` branches on platform: Linux calls the Rust `notify` command (libnotify); everything else uses `@tauri-apps/plugin-notification` with a permission check.
-- `tray/` has two tray services. `useTimer` imports `enhancedTrayService.ts`; `trayService.ts` is the older minimal version. The Rust `update_tray_snapshot` command only deserializes `status` and `remainingSeconds`, so the extra tooltip/icon/progress fields the enhanced service builds are currently ignored on the Rust side.
+- `tray/trayService.ts` wraps the Rust `update_tray_snapshot` command with a `TraySnapshot` of `status` and `remainingSeconds`. Tray failures are logged and swallowed so they never interrupt the timer.
 
 **Rust (`src-tauri/src/lib.rs`)** – builds the tray icon with a menu (Open / Start / Pause / Resume / Reset / Quit). Menu clicks for timer actions are forwarded to the frontend as a `tray-action` event carrying the menu id; the tooltip is updated by the `update_tray_snapshot` command. Closing the window is intercepted and hides it instead; the app only exits via the tray Quit item. New commands must be added to `generate_handler!`.
 
