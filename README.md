@@ -26,7 +26,20 @@ There are no accounts, no cloud sync, no analytics and no subscription. Your set
 
 ## Install
 
-Prebuilt packages are not published yet. See [Building from source](#building-from-source) below. Release artifacts will be attached to [GitHub Releases](https://github.com/Saffron-codes/nomad/releases) once v1 ships.
+Download the installer for your platform from the [latest release](https://github.com/Saffron-codes/nomad/releases/latest).
+
+| Platform              | Download                                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Windows (64-bit)      | [Nomad_1.0.0_x64-setup.exe](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64-setup.exe)   |
+| macOS (Apple Silicon) | [Nomad_1.0.0_aarch64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_aarch64.dmg)       |
+| macOS (Intel)         | [Nomad_1.0.0_x64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64.dmg)               |
+| Linux (Debian/Ubuntu) | [Nomad_1.0.0_amd64.deb](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.deb)           |
+| Linux (Fedora/RHEL)   | [Nomad-1.0.0-1.x86_64.rpm](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad-1.0.0-1.x86_64.rpm)     |
+| Linux (AppImage)      | [Nomad_1.0.0_amd64.AppImage](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.AppImage) |
+
+The macOS builds are not code-signed yet. On first launch, right-click the app and choose Open, or allow it under System Settings > Privacy & Security. Windows SmartScreen may show a similar warning for the unsigned installer.
+
+If you prefer to build it yourself, see [Building from source](#building-from-source).
 
 ## Building from source
 
