@@ -6,8 +6,16 @@ const resolveSessionSeconds = (
   session: "work" | "break" | null,
   durations: TimerDurations,
 ): number => {
-  if (session === "work") return toSeconds(durations.workMinutes);
-  if (session === "break") return toSeconds(durations.breakMinutes);
+  if (session === "work") {
+    return durations.workUnit === "hours"
+      ? toSeconds(durations.workMinutes * 60)
+      : toSeconds(durations.workMinutes);
+  }
+  if (session === "break") {
+    return durations.breakUnit === "hours"
+      ? toSeconds(durations.breakMinutes * 60)
+      : toSeconds(durations.breakMinutes);
+  }
   return 0;
 };
 
@@ -48,9 +56,27 @@ export function transitionTimerState(
     case "RESET":
       return initialTimerState;
     case "TICK":
+      if (state.phase !== "work" && state.phase !== "break") {
+        return state;
+      }
+
+      if (state.remainingSeconds > 1) {
+        return { ...state, remainingSeconds: state.remainingSeconds - 1 };
+      }
+
+      // When a session reaches zero, immediately transition to the opposite session.
+      if (state.phase === "work") {
+        return {
+          phase: "break",
+          activeSession: "break",
+          remainingSeconds: resolveSessionSeconds("break", durations),
+        };
+      }
+
       return {
-        ...state,
-        remainingSeconds: Math.max(0, state.remainingSeconds - 1),
+        phase: "work",
+        activeSession: "work",
+        remainingSeconds: resolveSessionSeconds("work", durations),
       };
     default:
       return state;

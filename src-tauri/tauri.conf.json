@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "nomad",
+  "productName": "Nomad",
   "version": "0.1.0",
   "identifier": "in.ascentads.nomad",
   "build": {
@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "nomad",
+        "title": "Nomad",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "minWidth": 640,
+        "minHeight": 560
       }
     ],
     "security": {
@@ -30,6 +32,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "category": "Productivity",
+    "shortDescription": "Work in focused stretches. Rest on time.",
+    "longDescription": "Nomad is a simple work-and-break timer. Set how long you want to work and how long to rest, press Start, and it reminds you when to step away and when to come back."
   }
 }

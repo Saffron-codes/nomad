@@ -3,6 +3,8 @@ import { load, type Store } from "@tauri-apps/plugin-store";
 export interface AppSettings {
   workMinutes: number;
   breakMinutes: number;
+  workUnit: "minutes" | "hours";
+  breakUnit: "minutes" | "hours";
 }
 
 const STORE_FILE = "settings.json";
@@ -11,6 +13,8 @@ const SETTINGS_KEY = "settings";
 export const defaultSettings: AppSettings = {
   workMinutes: 50,
   breakMinutes: 10,
+  workUnit: "minutes",
+  breakUnit: "minutes",
 };
 
 export interface SettingsStore {
@@ -23,7 +27,9 @@ const isValidSettings = (value: unknown): value is AppSettings => {
   const candidate = value as Partial<AppSettings>;
   return (
     typeof candidate.workMinutes === "number" &&
-    typeof candidate.breakMinutes === "number"
+    typeof candidate.breakMinutes === "number" &&
+    (candidate.workUnit === "minutes" || candidate.workUnit === "hours") &&
+    (candidate.breakUnit === "minutes" || candidate.breakUnit === "hours")
   );
 };
 

@@ -1,5 +1,8 @@
 # Nomad Plan
 
+Tauri Docs: https://tauri.app/**
+Use this Docs link for any references
+
 ## Phase 1 - Product Definition and Scope Lock
 
 ### Product statement

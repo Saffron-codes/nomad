@@ -1,4 +1,7 @@
+import { invoke } from "@tauri-apps/api/core";
+
 export type TrayStatus = "idle" | "work" | "break" | "paused";
+export type TrayAction = "start" | "pause" | "resume" | "reset";
 
 export interface TraySnapshot {
   status: TrayStatus;
@@ -10,13 +13,17 @@ export interface TrayService {
   setSnapshot(snapshot: TraySnapshot): Promise<void>;
 }
 
-export class NoopTrayService implements TrayService {
+export class TauriTrayService implements TrayService {
   async init(): Promise<void> {
-    // Implemented in Phase 4 when native tray actions are wired.
+    await this.setSnapshot({ status: "idle", remainingSeconds: 0 });
   }
 
   async setSnapshot(snapshot: TraySnapshot): Promise<void> {
-    void snapshot;
-    // Implemented in Phase 4 when native tray state sync is wired.
+    try {
+      await invoke("update_tray_snapshot", { snapshot });
+    } catch (error) {
+      // The tray is a convenience; never let it interrupt the timer.
+      console.warn("Could not update the tray:", error);
+    }
   }
 }

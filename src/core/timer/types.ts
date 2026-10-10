@@ -3,6 +3,8 @@ export type TimerPhase = "idle" | "work" | "break" | "paused";
 export interface TimerDurations {
   workMinutes: number;
   breakMinutes: number;
+  workUnit: "minutes" | "hours";
+  breakUnit: "minutes" | "hours";
 }
 
 export interface TimerState {
@@ -12,8 +14,8 @@ export interface TimerState {
 }
 
 export type TimerEvent =
-  | { type: "START_WORK"; durations: TimerDurations }
-  | { type: "START_BREAK"; durations: TimerDurations }
+  | { type: "START_WORK" }
+  | { type: "START_BREAK" }
   | { type: "PAUSE" }
   | { type: "RESUME" }
   | { type: "RESET" }
