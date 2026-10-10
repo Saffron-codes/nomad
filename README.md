@@ -131,7 +131,7 @@ When filing a bug, please include your operating system, how you installed Nomad
 
 ## License
 
-A license has not been chosen yet. Until a `LICENSE` file is added to the repository, the code is not licensed for reuse. This will be resolved before the v1 release.
+Nomad is released under the [MIT License](LICENSE).
 
 ## Acknowledgements
 

@@ -3,6 +3,7 @@ name = "nomad"
 version = "1.0.0"
 description = "Work in focused stretches. Rest on time."
 authors = ["Saffron Dionysius"]
+license = "MIT"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
