@@ -55,6 +55,12 @@ npm run tauri build
 
 Bundles are written to `src-tauri/target/release/bundle/`.
 
+On distributions with a recent binutils (Fedora 40+, for example), the AppImage step can fail with `failed to run linuxdeploy` because the `strip` tool bundled inside linuxdeploy does not understand RELR relocations. Disable stripping for that step:
+
+```bash
+NO_STRIP=true npm run tauri build
+```
+
 ## Development
 
 ```bash
