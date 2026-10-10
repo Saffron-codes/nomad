@@ -31,6 +31,7 @@ Download the installer for your platform from the [latest release](https://githu
 | Platform              | Download                                                                                                                 |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Windows (64-bit)      | [Nomad_1.0.0_x64-setup.exe](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64-setup.exe)   |
+| Windows (MSI)         | [Nomad_1.0.0_x64_en-US.msi](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64_en-US.msi)   |
 | macOS (Apple Silicon) | [Nomad_1.0.0_aarch64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_aarch64.dmg)       |
 | macOS (Intel)         | [Nomad_1.0.0_x64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64.dmg)               |
 | Linux (Debian/Ubuntu) | [Nomad_1.0.0_amd64.deb](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.deb)           |
