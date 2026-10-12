@@ -15,6 +15,13 @@ Nomad is a desktop timer that alternates between work and break sessions. You se
 
 There are no accounts, no cloud sync, no analytics and no subscription. Your settings are stored in a single JSON file on your machine.
 
+<p align="center">
+  <img src="docs/nomad-demo.gif" alt="Nomad demo: start a work session, change the routine to 25/5, read the about page, and return to the running timer" width="800" />
+</p>
+<p align="center">
+  <sub>20-second demo. <a href="docs/nomad-demo.mp4">Download as MP4</a>.</sub>
+</p>
+
 ## Features
 
 - **Configurable sessions.** Set work and break durations in minutes or hours (1 to 240).
