@@ -4,6 +4,7 @@ import { HomePage } from "./pages/HomePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { StoryPage } from "./pages/StoryPage";
 import { useTimerEngine } from "./hooks/useTimerEngine";
+import { UpdatePrompt } from "./components/UpdatePrompt";
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -22,6 +23,7 @@ function App() {
     <>
       <TimerEngine />
       <RouterProvider router={router} />
+      <UpdatePrompt />
     </>
   );
 }

@@ -8,6 +8,7 @@ All notable changes to Nomad are documented here. The format follows
 
 ### Added
 
+- Automatic updates. Nomad checks GitHub Releases on launch, shows what is new, and installs the newer version with one click. Works for the Windows installer, the macOS app and the Linux AppImage.
 - A "Pause the timer" setting for when the computer sleeps. On by default, the timer resumes with the same time left. Off, it follows the clock and moves on to the next session if one ended while the computer was asleep.
 
 ### Changed

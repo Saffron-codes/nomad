@@ -35,6 +35,18 @@
     ],
     "category": "Productivity",
     "shortDescription": "Work in focused stretches. Rest on time.",
-    "longDescription": "Nomad is a simple work-and-break timer. Set how long you want to work and how long to rest, press Start, and it reminds you when to step away and when to come back."
+    "longDescription": "Nomad is a simple work-and-break timer. Set how long you want to work and how long to rest, press Start, and it reminds you when to step away and when to come back.",
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFFMEM0MERBNEJDQjZGQzQKUldURWI4dEwya0FNcmpxVHI4bUp3bnZPR3AxSFhRMEppZ3pHcFFiaUhNWkZqMmJjWUhvdnZWblMK",
+      "endpoints": [
+        "https://github.com/Saffron-codes/nomad/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

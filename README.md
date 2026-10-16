@@ -23,6 +23,7 @@ There are no accounts, no cloud sync, no analytics and no subscription. Your set
 - **Sleep-aware.** The timer keeps real time, so it cannot drift while the window is hidden. By default it pauses while the computer sleeps and resumes with the same time left. Turn that off in Settings to keep it on the clock instead.
 - **System tray presence.** The tray tooltip shows the current phase and remaining time. The tray menu offers Open, Start, Pause, Resume, Stop and reset, and Quit.
 - **Stays running when closed.** Closing the window hides it to the tray. The app only exits from the tray's Quit item.
+- **Self-updating.** Checks GitHub Releases on launch and installs a newer version with one click (exe, app and AppImage installs).
 - **Cross-platform.** Built with Tauri v2 for Linux, macOS and Windows.
 
 ## Install
@@ -38,6 +39,8 @@ Download the installer for your platform from the [latest release](https://githu
 | Linux (Debian/Ubuntu) | [Nomad_1.0.0_amd64.deb](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.deb)           |
 | Linux (Fedora/RHEL)   | [Nomad-1.0.0-1.x86_64.rpm](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad-1.0.0-1.x86_64.rpm)     |
 | Linux (AppImage)      | [Nomad_1.0.0_amd64.AppImage](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.AppImage) |
+
+Nomad checks for a newer release each time it starts and offers to install it. The Windows installer, the macOS app and the Linux AppImage update themselves this way. The deb and rpm packages do not; update those with your package manager or by downloading the new file.
 
 The macOS builds are not code-signed yet. On first launch, right-click the app and choose Open, or allow it under System Settings > Privacy & Security. Windows SmartScreen may show a similar warning for the unsigned installer.
 
