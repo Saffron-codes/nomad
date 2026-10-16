@@ -20,6 +20,7 @@ There are no accounts, no cloud sync, no analytics and no subscription. Your set
 - **Configurable sessions.** Set work and break durations in minutes or hours (1 to 240).
 - **Automatic cycling.** When a work session ends a break starts, and vice versa, until you pause or reset.
 - **Native notifications** on every work-to-break and break-to-work transition.
+- **Sleep-aware.** The timer keeps real time, so it cannot drift while the window is hidden. By default it pauses while the computer sleeps and resumes with the same time left. Turn that off in Settings to keep it on the clock instead.
 - **System tray presence.** The tray tooltip shows the current phase and remaining time. The tray menu offers Open, Start, Pause, Resume, Stop and reset, and Quit.
 - **Stays running when closed.** Closing the window hides it to the tray. The app only exits from the tray's Quit item.
 - **Cross-platform.** Built with Tauri v2 for Linux, macOS and Windows.

@@ -1,16 +1,36 @@
 use serde::Deserialize;
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::TrayIconBuilder;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tauri::{Emitter, Manager, WindowEvent};
 
 const TRAY_ID: &str = "main-tray";
 const TRAY_EVENT_NAME: &str = "tray-action";
+const TICK_EVENT_NAME: &str = "timer-tick";
+const TICK_INTERVAL: Duration = Duration::from_secs(1);
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct TraySnapshot {
     status: String,
     remaining_seconds: u64,
+}
+
+/// Drives the frontend timer from a native thread. Webviews throttle
+/// JavaScript timers in hidden windows, and Nomad hides to the tray, so the
+/// tick must come from outside the webview. Each tick carries the clock
+/// reading (epoch milliseconds) it was taken at.
+fn spawn_ticker(app: tauri::AppHandle) {
+    std::thread::spawn(move || loop {
+        std::thread::sleep(TICK_INTERVAL);
+        let now_ms = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map(|elapsed| elapsed.as_millis() as u64)
+            .unwrap_or(0);
+        if app.emit(TICK_EVENT_NAME, now_ms).is_err() {
+            break;
+        }
+    });
 }
 
 fn format_remaining(seconds: u64) -> String {
@@ -114,6 +134,8 @@ pub fn run() {
                     _ => {}
                 })
                 .build(app)?;
+
+            spawn_ticker(app.handle().clone());
 
             Ok(())
         })

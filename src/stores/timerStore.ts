@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { initialTimerState, transitionTimerState } from "../core/timer/timerMachine";
-import type { TimerState, TimerEvent } from "../core/timer/types";
+import type { TimerState, TimerCommand } from "../core/timer/types";
 import { defaultSettings, type AppSettings } from "../services/settings/settingsStore";
 
 interface TimerStore {
@@ -11,7 +11,8 @@ interface TimerStore {
   isSavingSettings: boolean;
   settingsError: string | null;
 
-  transition: (event: TimerEvent) => void;
+  /** Applies a command at `now` (epoch ms), defaulting to the current clock. */
+  transition: (command: TimerCommand, now?: number) => void;
   setSettings: (settings: AppSettings) => void;
   setLoadingSettings: (loading: boolean) => void;
   setSavingSettings: (saving: boolean) => void;
@@ -27,9 +28,9 @@ export const useTimerStore = create<TimerStore>()(
       isSavingSettings: false,
       settingsError: null,
 
-      transition: (event) => {
+      transition: (command, now = Date.now()) => {
         set((prev) => ({
-          state: transitionTimerState(prev.state, event, prev.settings),
+          state: transitionTimerState(prev.state, { ...command, now }, prev.settings),
         }));
       },
       setSettings: (settings) => set({ settings }),

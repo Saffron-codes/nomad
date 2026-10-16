@@ -1,5 +1,5 @@
 import { ArrowLeft, Check, Undo2 } from "lucide-react";
-import { Button, Input, LinkButton, UnitSelector } from "../components/ui";
+import { Button, Input, LinkButton, Toggle, UnitSelector } from "../components/ui";
 import { useSettings } from "../hooks/useSettings";
 import { useDraftSettings } from "../hooks/useDraftSettings";
 import {
@@ -23,7 +23,8 @@ export function SettingsPage() {
     draftSettings.workMinutes !== settings.workMinutes ||
     draftSettings.breakMinutes !== settings.breakMinutes ||
     draftSettings.workUnit !== settings.workUnit ||
-    draftSettings.breakUnit !== settings.breakUnit;
+    draftSettings.breakUnit !== settings.breakUnit ||
+    draftSettings.pauseOnSleep !== settings.pauseOnSleep;
 
   const applySettings = async () => {
     const error =
@@ -100,6 +101,20 @@ export function SettingsPage() {
                 disabled={busy}
               />
             </div>
+          </div>
+
+          <div className="rounded-xl border border-white/10 bg-black/15 p-5">
+            <h2 className="text-lg font-medium text-nomad-text">
+              When your computer sleeps
+            </h2>
+            <Toggle
+              className="mt-4"
+              label="Pause the timer"
+              description="When you come back, you'll have the same time left as when the computer went to sleep. Turn this off to keep the timer on the clock instead; if a session ends while you're away, Nomad moves on to the next one."
+              checked={draftSettings.pauseOnSleep}
+              onChange={(pauseOnSleep) => updateDraft({ pauseOnSleep })}
+              disabled={busy}
+            />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4">

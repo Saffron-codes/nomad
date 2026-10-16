@@ -4,6 +4,21 @@ All notable changes to Nomad are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- A "Pause the timer" setting for when the computer sleeps. On by default, the timer resumes with the same time left. Off, it follows the clock and moves on to the next session if one ended while the computer was asleep.
+
+### Changed
+
+- The timer now keeps real time from a target end timestamp instead of counting ticks, so it no longer drifts when the webview throttles timers in a hidden window.
+- Ticks are driven from a native thread rather than a JavaScript interval.
+
+### Fixed
+
+- The countdown could fall behind on Windows after the window had been hidden to the tray for a few minutes.
+
 ## [1.0.0] - 2026-10-10
 
 The first release. Nomad is a local-only work/break timer for the desktop.
@@ -19,4 +34,5 @@ The first release. Nomad is a local-only work/break timer for the desktop.
 - Settings and About pages.
 - GitHub Actions workflows for CI checks and for building release installers on Linux, macOS and Windows.
 
+[Unreleased]: https://github.com/Saffron-codes/nomad/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/Saffron-codes/nomad/releases/tag/v1.0.0

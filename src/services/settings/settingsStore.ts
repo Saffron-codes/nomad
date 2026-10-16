@@ -5,6 +5,8 @@ export interface AppSettings {
   breakMinutes: number;
   workUnit: "minutes" | "hours";
   breakUnit: "minutes" | "hours";
+  /** Pause the timer while the computer sleeps instead of following the clock. */
+  pauseOnSleep: boolean;
 }
 
 const STORE_FILE = "settings.json";
@@ -15,6 +17,7 @@ export const defaultSettings: AppSettings = {
   breakMinutes: 10,
   workUnit: "minutes",
   breakUnit: "minutes",
+  pauseOnSleep: true,
 };
 
 export interface SettingsStore {
@@ -22,15 +25,27 @@ export interface SettingsStore {
   save(settings: AppSettings): Promise<void>;
 }
 
-const isValidSettings = (value: unknown): value is AppSettings => {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<AppSettings>;
-  return (
-    typeof candidate.workMinutes === "number" &&
-    typeof candidate.breakMinutes === "number" &&
-    (candidate.workUnit === "minutes" || candidate.workUnit === "hours") &&
-    (candidate.breakUnit === "minutes" || candidate.breakUnit === "hours")
-  );
+/**
+ * Accepts a settings object written by any released version. Fields added
+ * after 1.0.0 fall back to their defaults so older files keep working.
+ */
+export const normalizeSettings = (value: unknown): AppSettings | null => {
+  if (!value || typeof value !== "object") return null;
+  const { workMinutes, breakMinutes, workUnit, breakUnit, pauseOnSleep } =
+    value as Partial<AppSettings>;
+
+  if (typeof workMinutes !== "number" || typeof breakMinutes !== "number") return null;
+  if (workUnit !== "minutes" && workUnit !== "hours") return null;
+  if (breakUnit !== "minutes" && breakUnit !== "hours") return null;
+
+  return {
+    workMinutes,
+    breakMinutes,
+    workUnit,
+    breakUnit,
+    pauseOnSleep:
+      typeof pauseOnSleep === "boolean" ? pauseOnSleep : defaultSettings.pauseOnSleep,
+  };
 };
 
 export class TauriSettingsStore implements SettingsStore {
@@ -46,20 +61,18 @@ export class TauriSettingsStore implements SettingsStore {
 
   async load(): Promise<AppSettings> {
     const store = await this.getStore();
-    const persisted = await store.get<AppSettings>(SETTINGS_KEY);
-    if (isValidSettings(persisted)) {
-      return persisted;
-    }
-    return defaultSettings;
+    const persisted = await store.get<unknown>(SETTINGS_KEY);
+    return normalizeSettings(persisted) ?? defaultSettings;
   }
 
   async save(settings: AppSettings): Promise<void> {
-    if (!isValidSettings(settings)) {
+    const normalized = normalizeSettings(settings);
+    if (!normalized) {
       return;
     }
 
     const store = await this.getStore();
-    await store.set(SETTINGS_KEY, settings);
+    await store.set(SETTINGS_KEY, normalized);
     await store.save();
   }
 }

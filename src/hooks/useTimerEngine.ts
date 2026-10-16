@@ -1,10 +1,33 @@
 import { useEffect, useMemo, useRef } from "react";
-import { listen } from "@tauri-apps/api/event";
+import { listen, type EventCallback } from "@tauri-apps/api/event";
 import { useTimerStore } from "../stores/timerStore";
 import { TauriNotificationService } from "../services/notifications/notificationService";
 import { TauriTrayService, type TrayAction } from "../services/tray/trayService";
 import { TauriSettingsStore } from "../services/settings/settingsStore";
 import { describeDuration } from "../utils/timerUtils";
+
+/** Emitted once a second by the Rust side with the current epoch milliseconds. */
+const TICK_EVENT = "timer-tick";
+/** Emitted by the Rust side when a tray menu item is clicked. */
+const TRAY_ACTION_EVENT = "tray-action";
+
+/** Subscribes to a Tauri event for the lifetime of the returned cleanup. */
+const subscribe = <T>(name: string, handler: EventCallback<T>): (() => void) => {
+  let unlisten: (() => void) | undefined;
+  let disposed = false;
+
+  void listen<T>(name, handler)
+    .then((fn) => {
+      if (disposed) fn();
+      else unlisten = fn;
+    })
+    .catch((error) => console.warn(`Could not listen for ${name}:`, error));
+
+  return () => {
+    disposed = true;
+    unlisten?.();
+  };
+};
 
 /**
  * Runs the timer's side effects: ticking, notifications, tray updates, tray
@@ -14,6 +37,7 @@ import { describeDuration } from "../utils/timerUtils";
 export const useTimerEngine = () => {
   const phase = useTimerStore((s) => s.state.phase);
   const remainingSeconds = useTimerStore((s) => s.state.remainingSeconds);
+  const completedSessions = useTimerStore((s) => s.state.completedSessions);
   const settings = useTimerStore((s) => s.settings);
   const transition = useTimerStore((s) => s.transition);
   const setSettings = useTimerStore((s) => s.setSettings);
@@ -23,7 +47,7 @@ export const useTimerEngine = () => {
   const notificationService = useMemo(() => new TauriNotificationService(), []);
   const trayService = useMemo(() => new TauriTrayService(), []);
   const settingsStore = useMemo(() => new TauriSettingsStore(), []);
-  const previousPhaseRef = useRef(phase);
+  const previousCompletedRef = useRef(completedSessions);
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
 
@@ -53,68 +77,61 @@ export const useTimerEngine = () => {
     void trayService.init();
   }, [trayService]);
 
-  // Notify when a session ends and the next one begins.
+  // Notify when a session ends on its own and the next one begins. Several
+  // sessions can end in one tick after a long sleep; one notification covers
+  // whichever session is current now.
   useEffect(() => {
-    const previousPhase = previousPhaseRef.current;
-    const current = settingsRef.current;
+    const previous = previousCompletedRef.current;
+    previousCompletedRef.current = completedSessions;
+    if (completedSessions <= previous) return;
 
-    if (previousPhase === "work" && phase === "break") {
+    const current = settingsRef.current;
+    if (phase === "break") {
       void notificationService.notify({
         title: "Time for a break",
         body: `Nice work. Take ${describeDuration(current.breakMinutes, current.breakUnit)} to rest.`,
       });
-    }
-
-    if (previousPhase === "break" && phase === "work") {
+    } else if (phase === "work") {
       void notificationService.notify({
         title: "Break's over",
         body: `Time to get back to it for ${describeDuration(current.workMinutes, current.workUnit)}.`,
       });
     }
-
-    previousPhaseRef.current = phase;
-  }, [notificationService, phase]);
+  }, [notificationService, completedSessions, phase]);
 
   useEffect(() => {
     void trayService.setSnapshot({ status: phase, remainingSeconds });
   }, [phase, remainingSeconds, trayService]);
 
-  // Tray menu actions arrive from the Rust side as a "tray-action" event.
-  useEffect(() => {
-    let unlisten: (() => void) | undefined;
-    let disposed = false;
+  // Ticks come from a native thread so they keep arriving while the window is
+  // hidden, where webviews throttle JavaScript timers. Each carries the clock
+  // reading it was taken at, so bunched-up deliveries still resolve correctly.
+  useEffect(
+    () =>
+      subscribe<number>(TICK_EVENT, (event) =>
+        transition({ type: "TICK" }, event.payload),
+      ),
+    [transition],
+  );
 
-    void listen<TrayAction>("tray-action", (event) => {
-      switch (event.payload) {
-        case "start":
-          transition({ type: "START_WORK" });
-          break;
-        case "pause":
-          transition({ type: "PAUSE" });
-          break;
-        case "resume":
-          transition({ type: "RESUME" });
-          break;
-        case "reset":
-          transition({ type: "RESET" });
-          break;
-      }
-    })
-      .then((fn) => {
-        if (disposed) fn();
-        else unlisten = fn;
-      })
-      .catch((error) => console.warn("Could not listen for tray actions:", error));
-
-    return () => {
-      disposed = true;
-      unlisten?.();
-    };
-  }, [transition]);
-
-  useEffect(() => {
-    if (phase !== "work" && phase !== "break") return;
-    const intervalId = window.setInterval(() => transition({ type: "TICK" }), 1000);
-    return () => window.clearInterval(intervalId);
-  }, [phase, transition]);
+  useEffect(
+    () =>
+      subscribe<TrayAction>(TRAY_ACTION_EVENT, (event) => {
+        switch (event.payload) {
+          case "start":
+            transition({ type: "START_WORK" });
+            break;
+          case "pause":
+            transition({ type: "PAUSE" });
+            break;
+          case "resume":
+            transition({ type: "RESUME" });
+            break;
+          case "reset":
+            transition({ type: "RESET" });
+            break;
+        }
+      }),
+    [transition],
+  );
 };
