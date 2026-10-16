@@ -4,7 +4,7 @@ All notable changes to Nomad are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-10-16
 
 ### Added
 
@@ -35,5 +35,5 @@ The first release. Nomad is a local-only work/break timer for the desktop.
 - Settings and About pages.
 - GitHub Actions workflows for CI checks and for building release installers on Linux, macOS and Windows.
 
-[Unreleased]: https://github.com/Saffron-codes/nomad/compare/v1.0.0...HEAD
+[1.1.0]: https://github.com/Saffron-codes/nomad/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Saffron-codes/nomad/releases/tag/v1.0.0

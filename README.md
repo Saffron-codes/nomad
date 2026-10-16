@@ -32,13 +32,13 @@ Download the installer for your platform from the [latest release](https://githu
 
 | Platform              | Download                                                                                                                 |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Windows (64-bit)      | [Nomad_1.0.0_x64-setup.exe](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64-setup.exe)   |
-| Windows (MSI)         | [Nomad_1.0.0_x64_en-US.msi](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64_en-US.msi)   |
-| macOS (Apple Silicon) | [Nomad_1.0.0_aarch64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_aarch64.dmg)       |
-| macOS (Intel)         | [Nomad_1.0.0_x64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_x64.dmg)               |
-| Linux (Debian/Ubuntu) | [Nomad_1.0.0_amd64.deb](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.deb)           |
-| Linux (Fedora/RHEL)   | [Nomad-1.0.0-1.x86_64.rpm](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad-1.0.0-1.x86_64.rpm)     |
-| Linux (AppImage)      | [Nomad_1.0.0_amd64.AppImage](https://github.com/Saffron-codes/nomad/releases/download/v1.0.0/Nomad_1.0.0_amd64.AppImage) |
+| Windows (64-bit)      | [Nomad_1.1.0_x64-setup.exe](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad_1.1.0_x64-setup.exe)   |
+| Windows (MSI)         | [Nomad_1.1.0_x64_en-US.msi](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad_1.1.0_x64_en-US.msi)   |
+| macOS (Apple Silicon) | [Nomad_1.1.0_aarch64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad_1.1.0_aarch64.dmg)       |
+| macOS (Intel)         | [Nomad_1.1.0_x64.dmg](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad_1.1.0_x64.dmg)               |
+| Linux (Debian/Ubuntu) | [Nomad_1.1.0_amd64.deb](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad_1.1.0_amd64.deb)           |
+| Linux (Fedora/RHEL)   | [Nomad-1.1.0-1.x86_64.rpm](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad-1.1.0-1.x86_64.rpm)     |
+| Linux (AppImage)      | [Nomad_1.1.0_amd64.AppImage](https://github.com/Saffron-codes/nomad/releases/download/v1.1.0/Nomad_1.1.0_amd64.AppImage) |
 
 Nomad checks for a newer release each time it starts and offers to install it. The Windows installer, the macOS app and the Linux AppImage update themselves this way. The deb and rpm packages do not; update those with your package manager or by downloading the new file.
 
